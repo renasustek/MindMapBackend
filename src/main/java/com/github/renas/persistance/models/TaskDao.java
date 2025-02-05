@@ -1,7 +1,7 @@
 package com.github.renas.persistance.models;
 
-import com.github.renas.Request.Task.EisenhowerMatrix;
-import com.github.renas.Request.Task.TaskStatus;
+import com.github.renas.requests.task.EisenhowerMatrix;
+import com.github.renas.requests.task.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -40,7 +40,9 @@ public class TaskDao {
     @Column(name = "task_status")
     private TaskStatus taskStatus;
 
-    public TaskDao() {}
+    public TaskDao() {
+        //needed to satisfy hibernate
+    }
 
     public UUID getId() {
         return id;
@@ -78,7 +80,7 @@ public class TaskDao {
         return label;
     }
 
-    public void setLabel(UUID labelId) {
+    public void setLabel(String label) {
         this.label = label;
     }
 

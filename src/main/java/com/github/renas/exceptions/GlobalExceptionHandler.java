@@ -1,4 +1,4 @@
-package com.github.renas.Exceptions;
+package com.github.renas.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

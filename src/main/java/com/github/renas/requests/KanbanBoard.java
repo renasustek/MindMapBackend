@@ -1,6 +1,6 @@
-package com.github.renas.Request;
+package com.github.renas.requests;
 
-import com.github.renas.Request.Task.Task;
+import com.github.renas.requests.task.Task;
 
 import java.util.List;
 

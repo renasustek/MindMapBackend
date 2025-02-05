@@ -1,4 +1,4 @@
-package com.github.renas.Exceptions;
+package com.github.renas.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException {
 

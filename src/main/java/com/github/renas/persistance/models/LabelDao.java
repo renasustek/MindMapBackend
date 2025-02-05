@@ -20,8 +20,9 @@ public class LabelDao {
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
-    // Constructors, Getters, and Setters
-    public LabelDao() {}
+    public LabelDao() {
+        //needed to satisfy hibernate
+    }
 
     public UUID getId() {
         return id;

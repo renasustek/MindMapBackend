@@ -1,14 +1,11 @@
 package com.github.renas.service;
 
-import com.github.renas.Exceptions.ResourceNotFoundException;
-import com.github.renas.Request.Task.Task;
+import com.github.renas.exceptions.ResourceNotFoundException;
+import com.github.renas.requests.task.Task;
 import com.github.renas.persistance.TaskRepo;
 import com.github.renas.persistance.LabelRepo;
-import com.github.renas.persistance.models.TaskDao;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service

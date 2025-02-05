@@ -1,4 +1,4 @@
-package com.github.renas.Request.Task;
+package com.github.renas.requests.task;
 
 public enum TaskStatus {
     TODO, INPROGRESS, DONE
