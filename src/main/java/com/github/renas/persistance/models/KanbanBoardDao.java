@@ -1,18 +1,24 @@
 package com.github.renas.persistance.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@Table(name = "kanban_board")
+@Table(name = "kanban_board", schema = "mind_map")
 public class KanbanBoardDao {
 
     @Id
-    @Column(name = "uuid", nullable = false, updatable = false)
+    @Column(name = "uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID uuid;
 
     @Column(name = "name", nullable = false, length = 35)
+    @Size(min = 3, max = 35)
     private String name;
 
     public KanbanBoardDao() {

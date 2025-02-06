@@ -1,20 +1,26 @@
 package com.github.renas.persistance.models;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import java.util.UUID;
 
 @Entity
-@Table(name = "task_kanban")
+@Table(name = "task_kanban", schema = "mind_map")
 public class TaskKanbanDao {
 
     @Id
-    @Column(name = "task_kanban_id", nullable = false)
-    private UUID taskKanbanId;  // Primary key field
+    @Column(name = "task_kanban_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID taskKanbanId;
 
-    @Column(name = "kanban_board_uuid", nullable = false)
+    @Column(name = "kanban_board_uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID kanbanBoardUuid;
 
-    @Column(name = "task_uuid", nullable = false)
+    @Column(name = "task_uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID taskUuid;
 
     public TaskKanbanDao() {}
