@@ -11,11 +11,11 @@ import java.util.UUID;
 
 @RestController
 @CrossOrigin(origins = "https://localhost:8080")
-@RequestMapping(value = "/task", produces = MediaType.APPLICATION_JSON_VALUE)
-public class TaskController {
-    private final TaskService taskService;
+@RequestMapping(value = "/goal", produces = MediaType.APPLICATION_JSON_VALUE)
+public class GoalController {
+    private final GoalService GoalService;
 
-    public TaskController(TaskService taskService) {
+    public GoalController(TaskService taskService) {
         this.taskService = taskService;
     }
 
