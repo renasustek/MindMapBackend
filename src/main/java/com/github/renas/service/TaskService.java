@@ -69,10 +69,10 @@ public class TaskService {
         taskRepo.deleteById(task.id());
 
         TaskDao taskDao = new TaskDao();
-        return convertDao(task, taskDao, task.id());
+        return saveAndConvertTaskDaoToTask(task, taskDao, task.id());
     }
 
-    private Task convertDao(Task task, TaskDao taskDao, UUID id) {
+    private Task saveAndConvertTaskDaoToTask(Task task, TaskDao taskDao, UUID id) {
         taskDao.setId(id);
         taskDao.setName(task.name());
         taskDao.setDescription(task.description());
