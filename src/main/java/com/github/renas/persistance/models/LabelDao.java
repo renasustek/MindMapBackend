@@ -10,10 +10,10 @@ import org.hibernate.type.SqlTypes;
 import java.util.UUID;
 
 @Entity
-@Table(name = "Label", schema = "mind_map")
+@Table(name = "labels", schema = "mind_map")
 public class LabelDao {
     @Id
-    @Column(name = "UUID", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @Column(name = "label_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
 

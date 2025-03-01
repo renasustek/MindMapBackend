@@ -1,3 +1,5 @@
 package com.github.renas.chatbotRecources;
 
-public record ChatbotRequest(String message) {}
+import com.github.renas.requests.task.Label;
+
+public record ChatbotRequest(String message, Label label) {}
