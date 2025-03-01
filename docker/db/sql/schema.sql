@@ -37,3 +37,9 @@ CREATE TABLE IF NOT EXISTS `task_kanban` (
                                              FOREIGN KEY (`kanban_board_uuid`) REFERENCES `kanban_board`(`uuid`) ON DELETE CASCADE ON UPDATE CASCADE,
                                              FOREIGN KEY (`task_uuid`) REFERENCES `task`(`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS `chatbot_responses` (
+                                             `chatbot_response_id` CHAR(36) NOT NULL,
+                                             `response` VARCHAR(255) NOT NULL,
+                                             PRIMARY KEY (`chatbot_response_id`)
+                                               );

@@ -2,6 +2,7 @@ package com.github.renas.controller;
 
 import com.github.renas.requests.task.Task;
 import com.github.renas.requests.task.TaskRequestForCreate;
+import com.github.renas.requests.task.TaskStatus;
 import com.github.renas.service.TaskService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,11 @@ public class TaskController {
     @PostMapping("/create")
     public ResponseEntity<Task> createTask(@RequestBody TaskRequestForCreate task) {
         return ResponseEntity.ok(taskService.create(task));
+    }
+
+    @PostMapping("/change-status/{id}")
+    public ResponseEntity<TaskStatus> changeStatus(@PathVariable UUID id, @RequestBody TaskStatus status) {
+        return ResponseEntity.ok(taskService.changeStatus(id, status));
     }
 
     @DeleteMapping("/delete/{id}")

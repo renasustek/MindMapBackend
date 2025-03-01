@@ -6,6 +6,7 @@ import com.github.renas.requests.task.Task;
 import com.github.renas.persistance.TaskRepo;
 import com.github.renas.persistance.LabelRepo;
 import com.github.renas.requests.task.TaskRequestForCreate;
+import com.github.renas.requests.task.TaskStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -90,6 +91,13 @@ public class TaskService {
                 createdTask.getDueDate(),
                 createdTask.getTaskStatus()
         );
+    }
+
+    public TaskStatus changeStatus(UUID id, TaskStatus status) {
+        TaskDao taskDao = taskRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task with ID " + id + " not found"));
+        taskDao.setTaskStatus(status);
+        taskRepo.deleteById(id);
+        return taskRepo.save(taskDao).getTaskStatus();
     }
 }
 
