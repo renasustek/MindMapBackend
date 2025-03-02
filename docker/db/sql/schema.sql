@@ -44,9 +44,17 @@ CREATE TABLE IF NOT EXISTS `task_kanban`
 
 CREATE TABLE IF NOT EXISTS `labels`
 (
-    `label_id` CHAR(36)    NOT NULL,
+    `id` CHAR(36)    NOT NULL,
     `name`     VARCHAR(36) NOT NULL,
-    PRIMARY KEY (`label_id`)
+    PRIMARY KEY (`id`)
+);
+
+CREATE TABLE IF NOT EXISTS `chatbot_messages`
+(
+    `id` CHAR(36) NOT NULL,
+    `message`            VARCHAR(255),
+    `sentiment_score`            DECIMAL(5,4),
+    PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `label_chatbotmessage`
@@ -55,12 +63,7 @@ CREATE TABLE IF NOT EXISTS `label_chatbotmessage`
     `label_id` CHAR(36) NOT NULL,
     `chatbot_message_id`         CHAR(36) NOT NULL,
     PRIMARY KEY (`label_chatbotmessage_id`),
-    FOREIGN KEY (`label_id`) REFERENCES `labels` (`label_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`chatbot_message_id`) REFERENCES `chatbot_messages` (`chatbot_message_id`) ON DELETE CASCADE ON UPDATE CASCADE
+    FOREIGN KEY (`label_id`) REFERENCES `labels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (`chatbot_message_id`) REFERENCES `chatbot_messages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
-CREATE TABLE IF NOT EXISTS `chatbot_messages`
-(
-    `chatbot_message_id` CHAR(36) NOT NULL,
-    `message`            VARCHAR(255),
-    PRIMARY KEY (`chatbot_message_id`)
-);
+

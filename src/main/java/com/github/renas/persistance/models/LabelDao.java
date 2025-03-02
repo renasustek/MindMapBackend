@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(name = "labels", schema = "mind_map")
 public class LabelDao {
     @Id
-    @Column(name = "label_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @Column(name = "id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID id;
 

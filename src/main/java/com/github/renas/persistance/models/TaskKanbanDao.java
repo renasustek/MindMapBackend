@@ -15,11 +15,11 @@ public class TaskKanbanDao {
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID taskKanbanId;
 
-    @Column(name = "kanban_board_uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @Column(name = "kanban_board_uuid", columnDefinition = "CHAR(36)", nullable = false, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID kanbanBoardUuid;
 
-    @Column(name = "task_uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @Column(name = "task_uuid", columnDefinition = "CHAR(36)", nullable = false, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID taskUuid;
 

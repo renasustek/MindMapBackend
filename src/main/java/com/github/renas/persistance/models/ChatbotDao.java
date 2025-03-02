@@ -7,13 +7,14 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Entity
 @Table(name = "chatbot_messages", schema = "mind_map")
 public class ChatbotDao {
     @Id
-    @Column(name = "chatbot_message_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @Column(name = "id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID chatbotMessageId;
 
@@ -21,6 +22,9 @@ public class ChatbotDao {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String message;
 
+    @Column(name = "sentiment_score", columnDefinition = "DECIMAL(5,4)", nullable = false)
+    @JdbcTypeCode(SqlTypes.DECIMAL)
+    private BigDecimal sentimentScore;
     public ChatbotDao() {
     }
 
@@ -38,5 +42,13 @@ public class ChatbotDao {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public BigDecimal getSentimentScore() {
+        return sentimentScore;
+    }
+
+    public void setSentimentScore(BigDecimal sentimentScore) {
+        this.sentimentScore = sentimentScore;
     }
 }
