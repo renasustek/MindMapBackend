@@ -10,6 +10,7 @@ import com.github.renas.persistance.models.TaskDao;
 import com.github.renas.requests.KanbanBoard;
 import com.github.renas.requests.task.Task;
 import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -46,11 +47,13 @@ public class KanbanBoardService {
                         taskDao.getName(),
                         taskDao.getDescription(),
                         taskDao.getEisenhower(),
-                        taskDao.getLabel(),
+                        taskDao.getLabelId(),
+                        taskDao.getCreatedDate(),
                         taskDao.getDueDate(),
+                        taskDao.getCompletedDate(),
                         taskDao.getTaskStatus()
                 )
-        ).toList();
+        ).toList();//todo call the service not the repo please - no need to redo logic
 
         List<Task> todoTasks = new ArrayList<>();
         List<Task> inProgressTasks = new ArrayList<>();

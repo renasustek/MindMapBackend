@@ -9,17 +9,17 @@ import com.github.renas.requests.task.TaskRequestForCreate;
 import com.github.renas.requests.task.TaskStatus;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
 public class TaskService {
 
     public final TaskRepo taskRepo;
-    private final LabelRepo labelRepo;
 
-    public TaskService(TaskRepo taskRepo, LabelRepo labelRepo) {
+    public TaskService(TaskRepo taskRepo, LabelService labelService) {
         this.taskRepo = taskRepo;
-        this.labelRepo = labelRepo;
     }
 
     public Task getById(UUID id) {
@@ -29,8 +29,10 @@ public class TaskService {
                 taskDao.getName(),
                 taskDao.getDescription(),
                 taskDao.getEisenhower(),
-                taskDao.getLabel(),
+                taskDao.getLabelId(),
+                taskDao.getCreatedDate(),
                 taskDao.getDueDate(),
+                taskDao.getCompletedDate(),
                 taskDao.getTaskStatus()
         )).orElseThrow(() -> new ResourceNotFoundException("Task with ID " + id + " not found"));
     }
@@ -41,8 +43,10 @@ public class TaskService {
         taskDao.setName(task.name());
         taskDao.setDescription(task.description());
         taskDao.setEisenhower(task.eisenhowerMatrix());
-        taskDao.setLabel(task.label());
-        taskDao.setDueDate(task.date());
+        taskDao.setLabelId(task.labelId());
+        taskDao.setCreatedDate(Date.valueOf(java.time.LocalDate.now()));
+        taskDao.setDueDate(task.dueDate());
+        taskDao.setCompletedDate(null);
         taskDao.setTaskStatus(task.taskStatus());
         TaskDao createdTask = taskRepo.save(taskDao);
         return new Task(
@@ -50,8 +54,10 @@ public class TaskService {
                 createdTask.getName(),
                 createdTask.getDescription(),
                 createdTask.getEisenhower(),
-                createdTask.getLabel(),
+                createdTask.getLabelId(),
+                createdTask.getCreatedDate(),
                 createdTask.getDueDate(),
+                createdTask.getCompletedDate(),
                 createdTask.getTaskStatus()
         );
     }
@@ -78,8 +84,10 @@ public class TaskService {
         taskDao.setName(task.name());
         taskDao.setDescription(task.description());
         taskDao.setEisenhower(task.eisenhowerMatrix());
-        taskDao.setLabel(task.label());
-        taskDao.setDueDate(task.date());
+        taskDao.setLabelId(task.labelId());
+        taskDao.setCreatedDate(task.createdDate());
+        taskDao.setDueDate(task.dueDate());
+        taskDao.setCompletedDate(task.completedDate());
         taskDao.setTaskStatus(task.taskStatus());
         TaskDao createdTask = taskRepo.save(taskDao);
         return new Task(
@@ -87,18 +95,28 @@ public class TaskService {
                 createdTask.getName(),
                 createdTask.getDescription(),
                 createdTask.getEisenhower(),
-                createdTask.getLabel(),
+                createdTask.getLabelId(),
+                createdTask.getCreatedDate(),
                 createdTask.getDueDate(),
+                createdTask.getCompletedDate(),
                 createdTask.getTaskStatus()
+
         );
     }
 
-    public TaskStatus changeStatus(UUID id, TaskStatus status) {
-        TaskDao taskDao = taskRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Task with ID " + id + " not found"));
-        taskDao.setTaskStatus(status);
+    public TaskStatus changeStatus(UUID id, TaskStatus newStatus) {
+        TaskDao taskDao = taskRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task with ID " + id + " not found"));
+        taskDao.setTaskStatus(newStatus);
+        if(newStatus == TaskStatus.DONE) {
+            taskDao.setCompletedDate(Date.valueOf(LocalDate.now()));
+        } else {
+            taskDao.setCompletedDate(null);
+        }
         taskRepo.deleteById(id);
         return taskRepo.save(taskDao).getTaskStatus();
     }
+
 }
 
 

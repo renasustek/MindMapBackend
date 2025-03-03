@@ -1,8 +1,6 @@
 package com.github.renas.controller;
 
 import com.github.renas.requests.KanbanBoard;
-import com.github.renas.requests.task.Task;
-import com.github.renas.service.GoalService;
 import com.github.renas.service.KanbanBoardService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

@@ -34,18 +34,21 @@ public class ChatbotService {
                 chatbotUrl, request.fastApiRequest(), ChatbotResponse.class
         );
 
+        SentimentalAnalysisRequest sentimentalAnalysisRequest = new SentimentalAnalysisRequest(request.fastApiRequest().message());
+
         ResponseEntity<SentimentalAnalysisResponse> sentimentalAnalysisResponseEntity = restTemplate.postForEntity(
-                sentimentalAnalysisUrl, new SentimentalAnalysisRequest(request.fastApiRequest().message()), SentimentalAnalysisResponse.class
+                sentimentalAnalysisUrl, sentimentalAnalysisRequest, SentimentalAnalysisResponse.class
         );
 
+
         if (chatbotResponseEntity.getBody() != null && sentimentalAnalysisResponseEntity.getBody() != null) {
-            saveResponseToDatabase(request, new BigDecimal(sentimentalAnalysisResponseEntity.getBody().response()));
+            saveResponseToDatabase(request, sentimentalAnalysisResponseEntity.getBody().score());
         }//todo couldnt save to database if statment here
 
         return chatbotResponseEntity;
     }
 
-    private void saveResponseToDatabase(ChatbotRequest request, BigDecimal sentimentScore) {
+    private void saveResponseToDatabase(ChatbotRequest request, Float sentimentScore) {
         UUID chatbotMessageId = UUID.randomUUID();
 
         ChatbotDao chatbotDao = new ChatbotDao();

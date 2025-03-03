@@ -22,9 +22,10 @@ public class ChatbotDao {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String message;
 
-    @Column(name = "sentiment_score", columnDefinition = "DECIMAL(5,4)", nullable = false)
-    @JdbcTypeCode(SqlTypes.DECIMAL)
-    private BigDecimal sentimentScore;
+    @Column(name = "sentiment_score", columnDefinition = "FLOAT(4)", nullable = false)
+    @JdbcTypeCode(SqlTypes.FLOAT)
+    private Float sentimentScore;
+
     public ChatbotDao() {
     }
 
@@ -44,11 +45,11 @@ public class ChatbotDao {
         this.message = message;
     }
 
-    public BigDecimal getSentimentScore() {
+    public Float getSentimentScore() {
         return sentimentScore;
     }
 
-    public void setSentimentScore(BigDecimal sentimentScore) {
+    public void setSentimentScore(Float sentimentScore) {
         this.sentimentScore = sentimentScore;
     }
 }

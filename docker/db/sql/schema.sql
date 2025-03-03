@@ -14,8 +14,10 @@ CREATE TABLE IF NOT EXISTS `task`
     `name`        VARCHAR(35)                                 NOT NULL,
     `description` VARCHAR(255),
     `eisenhower`  ENUM ('DO', 'DELEGATE', 'DECIDE', 'DELETE') NOT NULL,
-    `label`       VARCHAR(36),
+    `label_id`       CHAR(36),
+    `created_date`    DATE,
     `due_date`    DATE,
+    `completed_date`    DATE,
     `task_status` ENUM ('TODO', 'INPROGRESS', 'DONE'),
     PRIMARY KEY (`uuid`)
 );
@@ -53,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `chatbot_messages`
 (
     `id` CHAR(36) NOT NULL,
     `message`            VARCHAR(255),
-    `sentiment_score`            DECIMAL(5,4),
+    `sentiment_score`            FLOAT(4),
     PRIMARY KEY (`id`)
 );
 

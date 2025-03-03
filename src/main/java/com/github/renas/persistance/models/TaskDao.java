@@ -29,12 +29,20 @@ public class TaskDao {
     @Column(name = "eisenhower", nullable = false)
     private EisenhowerMatrix eisenhower;
 
-    @Column(name = "label", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
-    private String label;
+    @Column(name = "label_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    private UUID labelId;
+
+    @Column(name = "created_date")
+    @Temporal(TemporalType.DATE)
+    private Date createdDate;
 
     @Column(name = "due_date")
     @Temporal(TemporalType.DATE)
     private Date dueDate;
+
+    @Column(name = "completed_date")
+    @Temporal(TemporalType.DATE)
+    private Date completedDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "task_status")
@@ -76,12 +84,12 @@ public class TaskDao {
         this.eisenhower = eisenhower;
     }
 
-    public String getLabel() {
-        return label;
+    public UUID getLabelId() {
+        return labelId;
     }
 
-    public void setLabel(String label) {
-        this.label = label;
+    public void setLabelId(UUID labelId) {
+        this.labelId = labelId;
     }
 
     public Date getDueDate() {
@@ -90,6 +98,22 @@ public class TaskDao {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getCompletedDate() {
+        return completedDate;
+    }
+
+    public void setCompletedDate(Date completedDate) {
+        this.completedDate = completedDate;
     }
 
     public TaskStatus getTaskStatus() {

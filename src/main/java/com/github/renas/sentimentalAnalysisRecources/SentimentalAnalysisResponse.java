@@ -1,4 +1,4 @@
 package com.github.renas.sentimentalAnalysisRecources;
 
-public record SentimentalAnalysisResponse(String response){
+public record SentimentalAnalysisResponse(Float score){
 }
