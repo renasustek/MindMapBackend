@@ -1,13 +1,16 @@
 package com.github.renas.service;
 
 import com.github.renas.exceptions.ResourceNotFoundException;
+import com.github.renas.persistance.TaskKanbanRepo;
 import com.github.renas.persistance.models.TaskDao;
+import com.github.renas.persistance.models.TaskKanbanDao;
 import com.github.renas.requests.task.Task;
 import com.github.renas.persistance.TaskRepo;
 import com.github.renas.persistance.LabelRepo;
 import com.github.renas.requests.task.TaskRequestForCreate;
 import com.github.renas.requests.task.TaskStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -17,9 +20,11 @@ import java.util.UUID;
 public class TaskService {
 
     public final TaskRepo taskRepo;
+    public final TaskKanbanRepo taskKanbanRepo;
 
-    public TaskService(TaskRepo taskRepo, LabelService labelService) {
+    public TaskService(TaskRepo taskRepo, LabelService labelService, TaskKanbanRepo taskKanbanRepo) {
         this.taskRepo = taskRepo;
+        this.taskKanbanRepo = taskKanbanRepo;
     }
 
     public Task getById(UUID id) {
@@ -37,8 +42,10 @@ public class TaskService {
         )).orElseThrow(() -> new ResourceNotFoundException("Task with ID " + id + " not found"));
     }
 
+    @Transactional
     public Task create(TaskRequestForCreate task) {
         TaskDao taskDao = new TaskDao();
+
         taskDao.setId(UUID.randomUUID());
         taskDao.setName(task.name());
         taskDao.setDescription(task.description());
@@ -47,8 +54,17 @@ public class TaskService {
         taskDao.setCreatedDate(Date.valueOf(java.time.LocalDate.now()));
         taskDao.setDueDate(task.dueDate());
         taskDao.setCompletedDate(null);
-        taskDao.setTaskStatus(task.taskStatus());
+        taskDao.setTaskStatus(TaskStatus.TODO);
+
         TaskDao createdTask = taskRepo.save(taskDao);
+
+        TaskKanbanDao taskKanbanDao = new TaskKanbanDao();
+
+        taskKanbanDao.setTaskKanbanId(UUID.randomUUID());
+        taskKanbanDao.setTaskUuid(createdTask.getId());
+        taskKanbanDao.setKanbanBoardUuid(task.kanbanboardUUID());
+        taskKanbanRepo.save(taskKanbanDao);
+
         return new Task(
                 createdTask.getId(),
                 createdTask.getName(),
@@ -77,7 +93,7 @@ public class TaskService {
 
         TaskDao taskDao = new TaskDao();
         return saveAndConvertTaskDaoToTask(task, taskDao, task.id());
-    }
+    }//todo when you delete and save it it deletes all forigen keys-> make it just update it not delete and put back
 
     private Task saveAndConvertTaskDaoToTask(Task task, TaskDao taskDao, UUID id) {
         taskDao.setId(id);
@@ -113,7 +129,6 @@ public class TaskService {
         } else {
             taskDao.setCompletedDate(null);
         }
-        taskRepo.deleteById(id);
         return taskRepo.save(taskDao).getTaskStatus();
     }
 

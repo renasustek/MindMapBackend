@@ -29,7 +29,8 @@ public class TaskDao {
     @Column(name = "eisenhower", nullable = false)
     private EisenhowerMatrix eisenhower;
 
-    @Column(name = "label_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @Column(name = "label_id", columnDefinition = "CHAR(36)", nullable = false, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID labelId;
 
     @Column(name = "created_date")

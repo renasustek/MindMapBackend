@@ -1,35 +1,49 @@
 package com.github.renas.persistance.models;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.sql.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "goal")
+@Table(name = "goal", schema = "mind_map")
 public class GoalDao {
 
     @Id
     @Column(name = "uuid", nullable = false, updatable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID uuid;
 
-    @Column(name = "kanban_board_id", nullable = false, updatable = false)
+    @Column(name = "kanban_board_id", columnDefinition = "CHAR(36)", nullable = false, updatable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID kanbanBoardId;
 
-    @Column(name = "specific_steps", columnDefinition = "VARCHAR(255)", nullable = false, unique = false, length = 255)
+    @Column(name = "specific_steps", columnDefinition = "VARCHAR(255)", nullable = false, length = 255)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private String specificSteps;
 
-    @Column(name = "measure_progress", columnDefinition = "VARCHAR(255)", nullable = false, unique = false, length = 255)
+    @Column(name = "measure_progress", columnDefinition = "VARCHAR(255)", nullable = false, length = 255)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
     private String measureProgress;
 
-    @Column(name = "is_goal_realistic", columnDefinition = "VARCHAR(255)", nullable = false, unique = false, length = 255)
+    @Column(name = "is_goal_realistic", nullable = false)
+    @JdbcTypeCode(SqlTypes.BOOLEAN)
     private boolean isGoalRealistic;
 
     @Column(name = "due_date")
     @Temporal(TemporalType.DATE)
+    @JdbcTypeCode(SqlTypes.DATE)
     private Date dueDate;
 
+    @Column(name = "completed_date", nullable = true)
+    @Temporal(TemporalType.DATE)
+    @JdbcTypeCode(SqlTypes.DATE)
+    private Date completedDate;
+
     public GoalDao() {
-        //needed to satisfy hibernate
+        //needed to satisfy Hibernate
     }
 
     public UUID getUuid() {
@@ -78,5 +92,13 @@ public class GoalDao {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public Date getCompletedDate() {
+        return completedDate;
+    }
+
+    public void setCompletedDate(Date completedDate) {
+        this.completedDate = completedDate;
     }
 }
