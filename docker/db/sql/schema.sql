@@ -99,7 +99,7 @@ VALUES
     ('658df2b9-b143-4c8c-a948-b9af0b404831', 'Task 7', 'Description D', 'DO', '9e064523-e95b-47ba-b2ba-51deefc11643', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 20 DAY), NULL, 'TODO'),
     ('e56016c4-61ee-4a0b-844b-61fe5613814b', 'Task 8', 'Description D', 'DO', '8223d779-3570-4c8b-b66f-a2bd664681fd', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 20 DAY), NULL, 'TODO'),
     ('4ca5b6f1-a8cd-4832-8002-23e5c0563650', 'Task 9', 'Description D', 'DO', 'ebf56277-bc49-4985-9a81-5636ffee7636', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 20 DAY), NULL, 'TODO'),
-    ('503923ee-c9ce-4f63-8575-705cbdf1c6b5', 'Task 10', 'Description D', 'DO', '9191c11f-07b9-44bf-8f07-e54515b5087ab', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 20 DAY), NULL, 'TODO'),
+    ('503923ee-c9ce-4f63-8575-705cbdf1c6b5', 'Task 10', 'Description D', 'DO', '9191c11f-07b9-44bf-8f07-e54515b5087a', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 20 DAY), NULL, 'TODO'),
     ('2afd804b-dd42-4491-9832-2eb0e73055f0', 'Task 12', 'Description D', 'DO', 'c0e11773-a2ed-4bfd-917d-9782d48d9456', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 20 DAY), NULL, 'TODO'),
     ('d17a8f93-e61a-4810-aa14-ec9724fddb66', 'Task 13', 'Description D', 'DO', '9e064523-e95b-47ba-b2ba-51deefc11643', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 20 DAY), NULL, 'TODO'),
     ('6044b366-f6d0-4327-930e-4151e40aeed4', 'Task 14', 'Description D', 'DO', '8223d779-3570-4c8b-b66f-a2bd664681fd', CURDATE(), DATE_ADD(CURDATE(), INTERVAL 20 DAY), NULL, 'TODO'),
