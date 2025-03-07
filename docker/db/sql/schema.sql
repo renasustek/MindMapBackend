@@ -290,7 +290,6 @@ VALUES
     ('8efd2c1a-9b1d-4fb5-ada5-8b9d087a6a46', '3715d4f5-9dde-4be2-a496-826899eb9583', '5d653a2d-f708-4c20-a7e3-80e9df7c3fe8'),
     ('290cd181-becd-4358-b722-fca9796d3383', '0c9cdd69-0d66-424d-af83-2361a8ccd20c', '0b51bc6b-8f71-4262-bbd5-5d4c31ad5cb0');
 
--- Insert Label-ChatbotMessage Relationships (Manually linked)
 INSERT INTO `label_chatbotmessage` (`label_chatbotmessage_id`, `label_id`, `chatbot_message_id`)
 VALUES
     ('4a8a9d28-5e71-40ef-86a2-dfd60db9e8f3', 'c0e11773-a2ed-4bfd-917d-9782d48d9456', 'ae5dac01-a526-4851-9cc4-3604ac5b8766'),

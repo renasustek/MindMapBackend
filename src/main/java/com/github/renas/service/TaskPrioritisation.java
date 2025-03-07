@@ -9,6 +9,7 @@ import com.github.renas.requests.task.TaskStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.ArrayList;
@@ -49,14 +50,20 @@ public class TaskPrioritisation {
         };
     }
     private double overdueFactor(Date dueDate){
-        int daysToDueDate = (int) ChronoUnit.DAYS.between(LocalDate.now(), (Temporal) dueDate);
+
+        LocalDate dueLocalDate = dueDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        long daysToDueDate = ChronoUnit.DAYS.between(LocalDate.now(), dueLocalDate);
+
         return daysToDueDate < 0 ? (1 + Math.abs(daysToDueDate)) : 0;
     }
 
     private double timeFactor(Date createdDate, Date dueDate){
 
-        int daysSinceCreated = (int) ChronoUnit.DAYS.between((Temporal) createdDate, LocalDate.now());
-        int daysToDueDate = (int) ChronoUnit.DAYS.between(LocalDate.now(), (Temporal) dueDate);
+        LocalDate createdLocalDate = createdDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dueLocalDate = dueDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        long daysSinceCreated = ChronoUnit.DAYS.between(createdLocalDate, LocalDate.now());
+        long daysToDueDate = ChronoUnit.DAYS.between(LocalDate.now(), dueLocalDate);
 
         return (double) daysSinceCreated / (daysToDueDate + 1);
 
