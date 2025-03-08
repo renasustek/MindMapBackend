@@ -50,8 +50,7 @@ public class TaskPrioritisation {
         };
     }
     private double overdueFactor(Date dueDate){
-
-        LocalDate dueLocalDate = dueDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dueLocalDate = LocalDate.parse(dueDate.toString());
         long daysToDueDate = ChronoUnit.DAYS.between(LocalDate.now(), dueLocalDate);
 
         return daysToDueDate < 0 ? (1 + Math.abs(daysToDueDate)) : 0;
@@ -59,8 +58,8 @@ public class TaskPrioritisation {
 
     private double timeFactor(Date createdDate, Date dueDate){
 
-        LocalDate createdLocalDate = createdDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate dueLocalDate = dueDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate createdLocalDate = LocalDate.parse(createdDate.toString());
+        LocalDate dueLocalDate = LocalDate.parse(dueDate.toString());
 
         long daysSinceCreated = ChronoUnit.DAYS.between(createdLocalDate, LocalDate.now());
         long daysToDueDate = ChronoUnit.DAYS.between(LocalDate.now(), dueLocalDate);

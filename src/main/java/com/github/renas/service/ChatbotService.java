@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -55,6 +57,7 @@ public class ChatbotService {
         chatbotDao.setChatbotMessageId(chatbotMessageId);
         chatbotDao.setMessage(request.fastApiRequest().message());
         chatbotDao.setSentimentScore(sentimentScore);
+        chatbotDao.setEntryDate(Date.valueOf(LocalDate.now()));
         chatbotRepo.save(chatbotDao);
 
         if (request.label()!=null) {

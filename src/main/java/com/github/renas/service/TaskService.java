@@ -126,6 +126,7 @@ public class TaskService {
         taskDao.setTaskStatus(newStatus);
         if(newStatus == TaskStatus.DONE) {
             taskDao.setCompletedDate(Date.valueOf(LocalDate.now()));
+
         } else {
             taskDao.setCompletedDate(null);
         }

@@ -1,13 +1,11 @@
 package com.github.renas.persistance.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -25,6 +23,11 @@ public class ChatbotDao {
     @Column(name = "sentiment_score", columnDefinition = "FLOAT(4)", nullable = false)
     @JdbcTypeCode(SqlTypes.FLOAT)
     private Float sentimentScore;
+
+    @Column(name = "entry_date")
+    @Temporal(TemporalType.DATE)
+    private Date entryDate;
+
 
     public ChatbotDao() {
     }
@@ -51,5 +54,13 @@ public class ChatbotDao {
 
     public void setSentimentScore(Float sentimentScore) {
         this.sentimentScore = sentimentScore;
+    }
+
+    public Date getEntryDate() {
+        return entryDate;
+    }
+
+    public void setEntryDate(Date entryDate) {
+        this.entryDate = entryDate;
     }
 }
