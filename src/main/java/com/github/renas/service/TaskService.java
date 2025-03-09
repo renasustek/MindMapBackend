@@ -1,6 +1,7 @@
 package com.github.renas.service;
 
 import com.github.renas.exceptions.ResourceNotFoundException;
+import com.github.renas.gamification.Rewards;
 import com.github.renas.persistance.TaskKanbanRepo;
 import com.github.renas.persistance.models.TaskDao;
 import com.github.renas.persistance.models.TaskKanbanDao;
@@ -19,12 +20,14 @@ import java.util.UUID;
 @Service
 public class TaskService {
 
-    public final TaskRepo taskRepo;
-    public final TaskKanbanRepo taskKanbanRepo;
+    private final TaskRepo taskRepo;
+    private final TaskKanbanRepo taskKanbanRepo;
+    private final XpService xpService;
 
-    public TaskService(TaskRepo taskRepo, LabelService labelService, TaskKanbanRepo taskKanbanRepo) {
+    public TaskService(TaskRepo taskRepo, LabelService labelService, TaskKanbanRepo taskKanbanRepo, XpService xpService) {
         this.taskRepo = taskRepo;
         this.taskKanbanRepo = taskKanbanRepo;
+        this.xpService = xpService;
     }
 
     public Task getById(UUID id) {
@@ -126,7 +129,7 @@ public class TaskService {
         taskDao.setTaskStatus(newStatus);
         if(newStatus == TaskStatus.DONE) {
             taskDao.setCompletedDate(Date.valueOf(LocalDate.now()));
-
+            xpService.addXP(Rewards.TASK_COMPLETED);
         } else {
             taskDao.setCompletedDate(null);
         }

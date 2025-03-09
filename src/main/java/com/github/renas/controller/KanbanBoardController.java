@@ -1,5 +1,4 @@
 package com.github.renas.controller;
-
 import com.github.renas.requests.KanbanBoard;
 import com.github.renas.service.KanbanBoardService;
 import org.springframework.http.MediaType;
@@ -18,10 +17,12 @@ public class KanbanBoardController {
         this.kanbanBoardService = kanbanBoardService;
     }
 
+
     @GetMapping("/get/{id}")
     public ResponseEntity<KanbanBoard> getKanbanBoard(@PathVariable UUID id) {
         return ResponseEntity.ok(kanbanBoardService.getKanbanBoard(id));
     }
+
 
 
 

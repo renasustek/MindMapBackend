@@ -2,6 +2,7 @@ package com.github.renas.service;
 
 import com.github.renas.chatbotRecources.ChatbotRequest;
 import com.github.renas.chatbotRecources.ChatbotResponse;
+import com.github.renas.gamification.Rewards;
 import com.github.renas.persistance.ChatbotRepo;
 import com.github.renas.persistance.models.ChatbotDao;
 import com.github.renas.persistance.LabelChatbotMessageRepo;
@@ -25,10 +26,12 @@ public class ChatbotService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final ChatbotRepo chatbotRepo;
     private final LabelChatbotMessageRepo labelChatbotMessageRepo;
+    private final XpService xpService;
 
-    public ChatbotService(ChatbotRepo chatbotRepo,LabelChatbotMessageRepo labelChatbotMessageRepo) {
+    public ChatbotService(ChatbotRepo chatbotRepo, LabelChatbotMessageRepo labelChatbotMessageRepo, XpService xpService) {
         this.chatbotRepo = chatbotRepo;
         this.labelChatbotMessageRepo = labelChatbotMessageRepo;
+        this.xpService = xpService;
     }
 
     public ResponseEntity<ChatbotResponse> sendRequest(ChatbotRequest request) {
@@ -59,6 +62,7 @@ public class ChatbotService {
         chatbotDao.setSentimentScore(sentimentScore);
         chatbotDao.setEntryDate(Date.valueOf(LocalDate.now()));
         chatbotRepo.save(chatbotDao);
+        xpService.addXP(Rewards.CHATBOT_USED);
 
         if (request.label()!=null) {
             LabelChatbotMessageDao labelChatbotMessageDao = new LabelChatbotMessageDao();

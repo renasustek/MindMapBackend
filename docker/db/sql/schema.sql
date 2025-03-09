@@ -8,31 +8,34 @@ CREATE TABLE users
     password VARCHAR(255)                     NOT NULL,
     role     ENUM ('ROLE_USER', 'ROLE_ADMIN') NOT NULL,
     xp       INT                              NOT NULL DEFAULT 0
-
 );
 
--- Create Kanban Board Table
 CREATE TABLE IF NOT EXISTS `kanban_board`
 (
     `uuid` CHAR(36)    NOT NULL,
+    `user_id` CHAR(36) NOT NULL,
     `name` VARCHAR(35) NOT NULL,
-    PRIMARY KEY (`uuid`)
+    PRIMARY KEY (`uuid`, `user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
--- Create Task Table
+
 CREATE TABLE IF NOT EXISTS `task`
 (
-    `uuid`           CHAR(36)                                    NOT NULL,
-    `name`           VARCHAR(35)                                 NOT NULL,
-    `description`    VARCHAR(255),
-    `eisenhower`     ENUM ('DO', 'DELEGATE', 'DECIDE', 'DELETE') NOT NULL,
-    `label_id`       CHAR(36),
-    `created_date`   DATE,
-    `due_date`       DATE,
+    `uuid` CHAR(36)    NOT NULL,
+    `user_id` CHAR(36) NOT NULL,
+    `name` VARCHAR(35) NOT NULL,
+    `description` VARCHAR(255),
+    `eisenhower` ENUM ('DO', 'DELEGATE', 'DECIDE', 'DELETE') NOT NULL,
+    `label_id` CHAR(36),
+    `created_date` DATE,
+    `due_date` DATE,
     `completed_date` DATE,
-    `task_status`    ENUM ('TODO', 'INPROGRESS', 'DONE'),
-    PRIMARY KEY (`uuid`)
+    `task_status` ENUM ('TODO', 'INPROGRESS', 'DONE'),
+    PRIMARY KEY (`uuid`, `user_id`),
+    FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 );
+
 
 -- Create Task-Kanban Relationship Table
 CREATE TABLE IF NOT EXISTS `task_kanban`
