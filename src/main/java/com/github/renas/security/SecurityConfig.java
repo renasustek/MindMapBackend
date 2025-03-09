@@ -31,15 +31,15 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for API-based auth
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for API-based authentication
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/register", "/auth/login", "/auth/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // ✅ Force session persistence
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS) // ✅ Always use sessions
                 )
-                .httpBasic(withDefaults()) // Enable API-based authentication
+                .httpBasic(withDefaults()) // ✅ Still allow Basic Auth if needed
                 .logout(logout -> logout
                         .logoutUrl("/auth/logout")
                         .invalidateHttpSession(true)
