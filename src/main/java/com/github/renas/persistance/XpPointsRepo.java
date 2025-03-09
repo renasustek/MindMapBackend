@@ -8,4 +8,5 @@ import java.util.UUID;
 
 @Repository
 public interface XpPointsRepo extends JpaRepository<XpDao, UUID> {
+
 }
