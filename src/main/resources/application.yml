@@ -25,3 +25,9 @@ logging.level.org:
       JdbcTemplate: DEBUG
       StatementCreatorUtils: TRACE
     security: DEBUG
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
+      timeout: 60m

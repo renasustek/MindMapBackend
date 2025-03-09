@@ -37,10 +37,14 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        // ✅ Explicitly create session if not already created
+        req.getSession(true);
+
         // ✅ Ensure JSESSIONID is set in response headers
         String sessionId = req.getSession().getId();
         res.setHeader("Set-Cookie", "JSESSIONID=" + sessionId + "; Path=/; HttpOnly; Secure");
 
-        return ResponseEntity.ok("Login successful. Session is active. ID = "+sessionId);
+        return ResponseEntity.ok("Login successful. Session is active.");
     }
+
 }
