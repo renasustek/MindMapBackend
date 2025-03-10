@@ -7,6 +7,7 @@ import com.github.renas.persistance.models.GoalDao;
 import com.github.renas.persistance.models.KanbanBoardDao;
 import com.github.renas.requests.GoalRequest;
 import com.github.renas.responses.GoalResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
@@ -14,6 +15,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.github.renas.security.CurrentUserId.getLoggedInUserId;
 
 @Service
 public class GoalService {
@@ -26,17 +29,16 @@ public class GoalService {
         this.kanbanBoardRepo = kanbanBoardRepo;
     }
 
-    // Create Goal with a custom Kanban Board name
     public GoalResponse createGoal(GoalRequest request) {
-        // Create Kanban Board with the provided name
         KanbanBoardDao kanbanBoard = new KanbanBoardDao();
         kanbanBoard.setUuid(UUID.randomUUID());
-        kanbanBoard.setName(request.kanbanBoardName()); // Use the name from the request
+        kanbanBoard.setUserId(getLoggedInUserId());
+        kanbanBoard.setName(request.kanbanBoardName());
         KanbanBoardDao savedKanbanBoard = kanbanBoardRepo.save(kanbanBoard);
 
-        // Create Goal
         GoalDao goal = new GoalDao();
         goal.setUuid(UUID.randomUUID());
+        goal.setUserId(getLoggedInUserId());
         goal.setKanbanBoardId(savedKanbanBoard.getUuid());
         goal.setSpecificSteps(request.specificSteps());
         goal.setMeasureProgress(request.measureProgress());
@@ -49,20 +51,18 @@ public class GoalService {
         return mapToGoalResponse(savedGoal);
     }
 
-    // Complete Goal
     public GoalResponse completeGoal(UUID goalId) {
-        GoalDao goal = goalRepo.findById(goalId)
+        GoalDao goal = goalRepo.findByIdUserId(goalId)
                 .orElseThrow(() -> new ResourceNotFoundException("Goal with ID " + goalId + " not found"));
 
-        goal.setCompletedDate(Date.valueOf(LocalDate.now())); // Set completion date to current date
+        goal.setCompletedDate(Date.valueOf(LocalDate.now()));
         GoalDao updatedGoal = goalRepo.save(goal);
 
         return mapToGoalResponse(updatedGoal);
     }
 
-    // Get all Goals
     public List<GoalResponse> getAllGoals() {
-        return goalRepo.findAll().stream()
+        return goalRepo.findAllForCurrentUser().stream()
                 .map(this::mapToGoalResponse)
                 .collect(Collectors.toList());
     }
@@ -74,8 +74,8 @@ public class GoalService {
                 goal.getSpecificSteps(),
                 goal.getMeasureProgress(),
                 goal.isGoalRealistic(),
-                goal.getDueDate(),
-                goal.getCompletedDate()
+                (Date) goal.getDueDate(),
+                (Date) goal.getCompletedDate()
         );
     }
 }

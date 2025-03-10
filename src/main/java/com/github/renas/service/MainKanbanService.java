@@ -21,9 +21,9 @@ public class MainKanbanService {
     }
 
     public List<Task> getTaskPrioritisation() {
-        Stream<Task> tasks = taskRepo.findAll().stream().map(taskDao ->
+        Stream<Task> tasks = taskRepo.findAllTasksByUserId().stream().map(taskDao ->
                 new Task(
-                        taskDao.getId(),
+                        taskDao.getUuid(),
                         taskDao.getName(),
                         taskDao.getDescription(),
                         taskDao.getEisenhower(),

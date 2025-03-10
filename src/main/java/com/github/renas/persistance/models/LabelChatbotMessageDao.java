@@ -9,10 +9,16 @@ import java.util.UUID;
 @Entity
 @Table(name = "label_chatbotmessage", schema = "mind_map")
 public class LabelChatbotMessageDao {
+
     @Id
-    @Column(name = "label_chatbotmessage_id", columnDefinition = "CHAR(36)", nullable = false, length = 36)
+    @Column(name = "uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
-    private UUID id;
+    private UUID uuid;
+
+    @Column(name = "user_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID userId;
+
 
     @Column(name = "label_id", columnDefinition = "CHAR(36)", nullable = false, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
@@ -25,12 +31,20 @@ public class LabelChatbotMessageDao {
     public LabelChatbotMessageDao() {
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public UUID getLabelId() {

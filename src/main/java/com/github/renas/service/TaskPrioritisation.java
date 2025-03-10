@@ -70,8 +70,8 @@ public class TaskPrioritisation {
 
     private double sentimentFactor(UUID labelId){
         List<Float> sentimentScoreList = new ArrayList<>();
-        labelChatbotRepo.findChatbotIdUsingLabelId(labelId).stream().map(chatbotId ->
-                sentimentScoreList.add(chatbotRepo.findSentimentScore(chatbotId))
+        labelChatbotRepo.findChatbotIdUsingLabelIdForCurrentUser(labelId).stream().map(chatbotId ->
+                sentimentScoreList.add(chatbotRepo.findSentimentScoreForCurrentUser(chatbotId))
                 );
 
         if (sentimentScoreList.isEmpty()) return 1.0;

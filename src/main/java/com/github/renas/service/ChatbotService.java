@@ -13,10 +13,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static com.github.renas.security.CurrentUserId.getLoggedInUserId;
 
 @Service
 public class ChatbotService {
@@ -57,7 +58,8 @@ public class ChatbotService {
         UUID chatbotMessageId = UUID.randomUUID();
 
         ChatbotDao chatbotDao = new ChatbotDao();
-        chatbotDao.setChatbotMessageId(chatbotMessageId);
+        chatbotDao.setUuid(chatbotMessageId);
+        chatbotDao.setUserId(getLoggedInUserId());
         chatbotDao.setMessage(request.fastApiRequest().message());
         chatbotDao.setSentimentScore(sentimentScore);
         chatbotDao.setEntryDate(Date.valueOf(LocalDate.now()));
@@ -66,11 +68,13 @@ public class ChatbotService {
 
         if (request.label()!=null) {
             LabelChatbotMessageDao labelChatbotMessageDao = new LabelChatbotMessageDao();
-            labelChatbotMessageDao.setId(UUID.randomUUID());
+            labelChatbotMessageDao.setUuid(UUID.randomUUID());
+            labelChatbotMessageDao.setUserId(getLoggedInUserId());
             labelChatbotMessageDao.setLabelId(request.label().uuid());
             labelChatbotMessageDao.setChatbotMessageId(chatbotMessageId);
             labelChatbotMessageRepo.save(labelChatbotMessageDao);
         }
 
     }
+
 }

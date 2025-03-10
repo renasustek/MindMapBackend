@@ -11,9 +11,13 @@ import java.util.UUID;
 public class TaskKanbanDao {
 
     @Id
-    @Column(name = "task_kanban_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @Column(name = "uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
-    private UUID taskKanbanId;
+    private UUID uuid;
+
+    @Column(name = "user_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID userId;
 
     @Column(name = "kanban_board_uuid", columnDefinition = "CHAR(36)", nullable = false, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
@@ -25,12 +29,20 @@ public class TaskKanbanDao {
 
     public TaskKanbanDao() {}
 
-    public UUID getTaskKanbanId() {
-        return taskKanbanId;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setTaskKanbanId(UUID taskKanbanId) {
-        this.taskKanbanId = taskKanbanId;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public UUID getKanbanBoardUuid() {

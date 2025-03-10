@@ -13,10 +13,15 @@ import java.util.Date;
 @Entity
 @Table(name = "task", schema = "mind_map")
 public class TaskDao {
+
     @Id
     @Column(name = "uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
-    private UUID id;
+    private UUID uuid;
+
+    @Column(name = "user_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID userId;
 
     @Column(name = "name", nullable = false, length = 35)
     @Size(min = 3, max = 35)
@@ -53,12 +58,20 @@ public class TaskDao {
         //needed to satisfy hibernate
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getName() {

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.UUID;
 
 @Entity
@@ -12,39 +12,35 @@ import java.util.UUID;
 public class GoalDao {
 
     @Id
-    @Column(name = "uuid", nullable = false, updatable = false)
+    @Column(name = "uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID uuid;
 
-    @Column(name = "kanban_board_id", columnDefinition = "CHAR(36)", nullable = false, updatable = false)
+    @Column(name = "user_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID userId;
+
+    @Column(name = "kanban_board_id", nullable = false)
     private UUID kanbanBoardId;
 
-    @Column(name = "specific_steps", columnDefinition = "VARCHAR(255)", nullable = false, length = 255)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "specific_steps", length = 255)
     private String specificSteps;
 
-    @Column(name = "measure_progress", columnDefinition = "VARCHAR(255)", nullable = false, length = 255)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Column(name = "measure_progress", length = 255)
     private String measureProgress;
 
     @Column(name = "is_goal_realistic", nullable = false)
-    @JdbcTypeCode(SqlTypes.BOOLEAN)
     private boolean isGoalRealistic;
 
-    @Column(name = "due_date")
     @Temporal(TemporalType.DATE)
-    @JdbcTypeCode(SqlTypes.DATE)
+    @Column(name = "due_date")
     private Date dueDate;
 
-    @Column(name = "completed_date", nullable = true)
     @Temporal(TemporalType.DATE)
-    @JdbcTypeCode(SqlTypes.DATE)
+    @Column(name = "completed_date")
     private Date completedDate;
 
-    public GoalDao() {
-        //needed to satisfy Hibernate
-    }
+    public GoalDao() {}
 
     public UUID getUuid() {
         return uuid;
@@ -52,6 +48,14 @@ public class GoalDao {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public UUID getKanbanBoardId() {

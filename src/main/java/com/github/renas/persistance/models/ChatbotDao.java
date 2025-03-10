@@ -4,40 +4,48 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.UUID;
 
 @Entity
 @Table(name = "chatbot_messages", schema = "mind_map")
 public class ChatbotDao {
-    @Id
-    @Column(name = "id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
-    @JdbcTypeCode(SqlTypes.CHAR)
-    private UUID chatbotMessageId;
 
-    @Column(name = "message", columnDefinition = "VARCHAR(255)", nullable = false, unique = true, length = 255)
-    @JdbcTypeCode(SqlTypes.VARCHAR)
+    @Id
+    @Column(name = "uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID uuid;
+
+    @Column(name = "user_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID userId;
+
+    @Column(name = "message", nullable = false, length = 255)
     private String message;
 
-    @Column(name = "sentiment_score", columnDefinition = "FLOAT(4)", nullable = false)
-    @JdbcTypeCode(SqlTypes.FLOAT)
+    @Column(name = "sentiment_score", nullable = false)
     private Float sentimentScore;
 
-    @Column(name = "entry_date")
     @Temporal(TemporalType.DATE)
+    @Column(name = "entry_date")
     private Date entryDate;
 
+    public ChatbotDao() {}
 
-    public ChatbotDao() {
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public UUID getChatbotMessageId() {
-        return chatbotMessageId;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
-    public void setChatbotMessageId(UUID chatbotMessageId) {
-        this.chatbotMessageId = chatbotMessageId;
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getMessage() {

@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.github.renas.security.CurrentUserId.getLoggedInUserId;
+
 
 @Service
 public class KanbanBoardService {
@@ -34,16 +36,16 @@ public class KanbanBoardService {
     public KanbanBoard getKanbanBoard(UUID id) {
         String boardName = getKanbanBoardName(id);
 
-        List<UUID> taskUUIDs = taskKanbanRepo.findTaskIdsByKanbanBoardUuid(id);
+        List<UUID> taskUUIDs = taskKanbanRepo.findTaskIdsForCurrentUser(id);
 
         if (taskUUIDs.isEmpty()) {
             throw new ResourceNotFoundException("Kanbanboard with ID " + id + " has no tasks");
         }
 
-        List<TaskDao> taskDaos = taskRepo.findAllById(taskUUIDs);
+        List<TaskDao> taskDaos = taskRepo.findAllForCurrentUserByTaskIds(taskUUIDs);
 
         List<Task> tasksList = taskDaos.stream().map(taskDao -> new Task(
-                        taskDao.getId(),
+                        taskDao.getUuid(),
                         taskDao.getName(),
                         taskDao.getDescription(),
                         taskDao.getEisenhower(),
@@ -77,13 +79,13 @@ public class KanbanBoardService {
     }
 
     private String getKanbanBoardName(UUID id) {
-        Optional<KanbanBoardDao> kanbanBoardDaoOptional = kanbanRepo.findById(id);
+        Optional<KanbanBoardDao> kanbanBoardDaoOptional = kanbanRepo.findByIdUserId(id);
         if (kanbanBoardDaoOptional.isEmpty()) {
             throw new ResourceNotFoundException("Kanbanboard with ID " + id + " does not exist");
         }
 
-        String boardName = kanbanBoardDaoOptional.get().getName();
-        return boardName;
+        return kanbanBoardDaoOptional.get().getName();
+
     }
 }
 

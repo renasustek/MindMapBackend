@@ -51,8 +51,8 @@ public class ProcrastinationService {
     }
 
     private double calculateProcrastinationScore(LocalDate startDate, LocalDate endDate) {
-        long completedOnTime = taskRepo.countTasksCompletedOnTime(startDate, endDate);
-        long totalTasks = taskRepo.countTotalTasks(startDate, endDate);
+        long completedOnTime = taskRepo.countTasksCompletedOnTimeForCurrentUser(startDate, endDate);
+        long totalTasks = taskRepo.countTotalTasksForCurrentUser(startDate, endDate);
 
         // If no tasks exist in this interval, return 0
         if (totalTasks == 0) {
@@ -61,7 +61,7 @@ public class ProcrastinationService {
 
         double TCR = (double) completedOnTime / totalTasks;
 
-        Double avgSentimentScore = chatbotRepo.findAverageSentimentScore(startDate, endDate);
+        Double avgSentimentScore = chatbotRepo.findAverageSentimentScoreForCurrentUser(startDate, endDate);
 
         // If no sentiment data exists, assume neutral (0.5) OR return 0.
         if (avgSentimentScore == null) {

@@ -7,7 +7,6 @@ import com.github.renas.persistance.models.TaskDao;
 import com.github.renas.persistance.models.TaskKanbanDao;
 import com.github.renas.requests.task.Task;
 import com.github.renas.persistance.TaskRepo;
-import com.github.renas.persistance.LabelRepo;
 import com.github.renas.requests.task.TaskRequestForCreate;
 import com.github.renas.requests.task.TaskStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static com.github.renas.security.CurrentUserId.getLoggedInUserId;
 
 @Service
 public class TaskService {
@@ -32,8 +33,8 @@ public class TaskService {
 
     public Task getById(UUID id) {
 
-        return taskRepo.findById(id).map(taskDao -> new Task(
-                taskDao.getId(),
+        return taskRepo.findTaskByIdForCurrentUser(id).map(taskDao -> new Task(
+                taskDao.getUuid(),
                 taskDao.getName(),
                 taskDao.getDescription(),
                 taskDao.getEisenhower(),
@@ -49,7 +50,8 @@ public class TaskService {
     public Task create(TaskRequestForCreate task) {
         TaskDao taskDao = new TaskDao();
 
-        taskDao.setId(UUID.randomUUID());
+        taskDao.setUuid(UUID.randomUUID());
+        taskDao.setUserId(getLoggedInUserId());
         taskDao.setName(task.name());
         taskDao.setDescription(task.description());
         taskDao.setEisenhower(task.eisenhowerMatrix());
@@ -63,13 +65,13 @@ public class TaskService {
 
         TaskKanbanDao taskKanbanDao = new TaskKanbanDao();
 
-        taskKanbanDao.setTaskKanbanId(UUID.randomUUID());
-        taskKanbanDao.setTaskUuid(createdTask.getId());
+        taskKanbanDao.setKanbanBoardUuid(UUID.randomUUID());
+        taskKanbanDao.setTaskUuid(createdTask.getUuid());
         taskKanbanDao.setKanbanBoardUuid(task.kanbanboardUUID());
         taskKanbanRepo.save(taskKanbanDao);
 
         return new Task(
-                createdTask.getId(),
+                createdTask.getUuid(),
                 createdTask.getName(),
                 createdTask.getDescription(),
                 createdTask.getEisenhower(),
@@ -86,10 +88,10 @@ public class TaskService {
             throw new ResourceNotFoundException("Task with ID " + id + " not found");
         }
         taskRepo.deleteById(id);
-    }
+    }//todo make it delete by user id aswell
 
     public Task update(Task task) {
-        if (!taskRepo.existsById(task.id())) {
+        if (!taskRepo.existsById((task.id()))) {
             throw new ResourceNotFoundException("Task with ID " + task.id() + " not found");
         }
         taskRepo.deleteById(task.id());
@@ -97,9 +99,11 @@ public class TaskService {
         TaskDao taskDao = new TaskDao();
         return saveAndConvertTaskDaoToTask(task, taskDao, task.id());
     }//todo when you delete and save it it deletes all forigen keys-> make it just update it not delete and put back
+    //todo make it update by user id
 
     private Task saveAndConvertTaskDaoToTask(Task task, TaskDao taskDao, UUID id) {
-        taskDao.setId(id);
+        taskDao.setUuid(id);
+        taskDao.setUserId(getLoggedInUserId());
         taskDao.setName(task.name());
         taskDao.setDescription(task.description());
         taskDao.setEisenhower(task.eisenhowerMatrix());
@@ -110,7 +114,7 @@ public class TaskService {
         taskDao.setTaskStatus(task.taskStatus());
         TaskDao createdTask = taskRepo.save(taskDao);
         return new Task(
-                createdTask.getId(),
+                createdTask.getUuid(),
                 createdTask.getName(),
                 createdTask.getDescription(),
                 createdTask.getEisenhower(),
@@ -124,15 +128,19 @@ public class TaskService {
     }
 
     public TaskStatus changeStatus(UUID id, TaskStatus newStatus) {
-        TaskDao taskDao = taskRepo.findById(id)
+
+        TaskDao taskDao = taskRepo.findTaskByIdForCurrentUser(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Task with ID " + id + " not found"));
+
         taskDao.setTaskStatus(newStatus);
-        if(newStatus == TaskStatus.DONE) {
+
+        if (newStatus == TaskStatus.DONE) {
             taskDao.setCompletedDate(Date.valueOf(LocalDate.now()));
             xpService.addXP(Rewards.TASK_COMPLETED);
         } else {
             taskDao.setCompletedDate(null);
         }
+
         return taskRepo.save(taskDao).getTaskStatus();
     }
 

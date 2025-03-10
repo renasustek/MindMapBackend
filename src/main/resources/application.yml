@@ -12,9 +12,13 @@ spring:
       ddl-auto: none
       naming:
         physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    properties:
+      hibernate:
+        format_sql: true
   sql:
     init:
       mode: always
+
 
 logging.level.org:
   hibernate:
@@ -31,3 +35,4 @@ server:
     session:
       tracking-modes: cookie
       timeout: 60m
+

@@ -1,9 +1,6 @@
 package com.github.renas.persistance.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -12,10 +9,15 @@ import java.util.UUID;
 @Entity
 @Table(name = "labels", schema = "mind_map")
 public class LabelDao {
+
     @Id
-    @Column(name = "id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @Column(name = "uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
-    private UUID id;
+    private UUID uuid;
+
+    @Column(name = "user_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @JdbcTypeCode(SqlTypes.CHAR)
+    private UUID userId;
 
     @Column(name = "name", nullable = false, length = 255)
     private String name;
@@ -24,12 +26,20 @@ public class LabelDao {
         //needed to satisfy hibernate
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public String getName() {
