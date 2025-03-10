@@ -64,8 +64,8 @@ public class TaskService {
         TaskDao createdTask = taskRepo.save(taskDao);
 
         TaskKanbanDao taskKanbanDao = new TaskKanbanDao();
-
-        taskKanbanDao.setKanbanBoardUuid(UUID.randomUUID());
+        taskKanbanDao.setUuid(UUID.randomUUID());
+        taskKanbanDao.setUserId(getLoggedInUserId());
         taskKanbanDao.setTaskUuid(createdTask.getUuid());
         taskKanbanDao.setKanbanBoardUuid(task.kanbanboardUUID());
         taskKanbanRepo.save(taskKanbanDao);

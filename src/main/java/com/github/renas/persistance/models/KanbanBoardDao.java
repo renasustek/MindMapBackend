@@ -16,12 +16,12 @@ public class KanbanBoardDao {
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID uuid;
 
-    @Column(name = "user_id", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)
+    @Column(name = "user_id", columnDefinition = "CHAR(36)", nullable = false, length = 36)
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID userId;
 
     @Column(name = "name", nullable = false, length = 35)
-    @Size(min = 3, max = 35)
+    @Size(min = 1, max = 35)
     private String name;
 
     public KanbanBoardDao() {

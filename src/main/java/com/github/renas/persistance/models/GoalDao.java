@@ -20,7 +20,8 @@ public class GoalDao {
     @JdbcTypeCode(SqlTypes.CHAR)
     private UUID userId;
 
-    @Column(name = "kanban_board_id", nullable = false)
+    @Column(name = "kanban_board_id", columnDefinition = "CHAR(36)",nullable = false)
+    @JdbcTypeCode(SqlTypes.CHAR)
     private UUID kanbanBoardId;
 
     @Column(name = "specific_steps", length = 255)

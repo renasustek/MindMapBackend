@@ -7,13 +7,14 @@ import com.github.renas.persistance.models.XpDao;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.util.*;
+
+import static com.github.renas.security.CurrentUserId.getLoggedInUserId;
 
 
 @Service
 public class XpService {
     private final XpPointsRepo xpPointsRepo;
-
 
     public XpService(XpPointsRepo xpPointsRepo) {
         this.xpPointsRepo = xpPointsRepo;
@@ -21,13 +22,33 @@ public class XpService {
 
     public XpDao addXP(Rewards rewards) {
         XpDao xpDao = new XpDao();
-        xpDao.setId(userId());
-        xpDao.setXpPoints(rewards.getXpValue() + xpPointsRepo.findById(userId()).get().getXpPoints());
+        xpDao.setId(getLoggedInUserId());
+        xpDao.setXpPoints(rewards.getXpValue() +xpPointsRepo.findById(getLoggedInUserId()).get().getXpPoints());
         return xpPointsRepo.save(xpDao);
     }
 
-    private UUID userId() {
-        UserDao userDetails = (UserDao) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userDetails.getId();
+
+    private int calculateLevel(int xp) {
+        return (int) Math.sqrt(xp / 100.0);  // Example XP to Level formula
     }
+
+    public int getUserLevel() {
+        return xpPointsRepo.findById(getLoggedInUserId())
+                .map(xpDao -> calculateLevel(xpDao.getXpPoints()))
+                .orElse(0);
+    }
+
+    public List<Map<String, Object>> getLeaderboard() {
+        List<XpDao> users = xpPointsRepo.findAllByOrderByXpDesc();
+        List<Map<String, Object>> leaderboard = new ArrayList<>();
+        for (XpDao user : users) {
+            Map<String, Object> entry = new HashMap<>();
+            entry.put("username", user.getUsername());
+            entry.put("xp", user.getXpPoints());
+            entry.put("level", calculateLevel(user.getXpPoints()));
+            leaderboard.add(entry);
+        }
+        return leaderboard;
+    }
+
 }
