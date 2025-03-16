@@ -2,6 +2,7 @@ package com.github.renas.service;
 
 import com.github.renas.persistance.LabelRepo;
 import com.github.renas.persistance.models.LabelDao;
+import com.github.renas.requests.LabelRequest;
 import com.github.renas.requests.task.Label;
 import com.github.renas.exceptions.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
@@ -22,10 +23,10 @@ public class LabelService {
     }
 
     // CREATE - Save a new label
-    public Label createLabel(Label label) {
+    public Label createLabel(LabelRequest label) {
         LabelDao labelDao = new LabelDao();
         labelDao.setUuid(UUID.randomUUID()); // Generate UUID
-        labelDao.setUuid(getLoggedInUserId()); // Generate UUID
+        labelDao.setUserId(getLoggedInUserId()); // Generate UUID
         labelDao.setName(label.name());
 
         LabelDao savedLabel = labelRepo.save(labelDao);

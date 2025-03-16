@@ -1,5 +1,6 @@
 package com.github.renas.controller;
 
+import com.github.renas.requests.LabelRequest;
 import com.github.renas.requests.task.Label;
 import com.github.renas.service.LabelService;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class LabelController {
 
     // CREATE - Add a new label
     @PostMapping
-    public ResponseEntity<Label> createLabel(@RequestBody Label label) {
-        Label createdLabel = labelService.createLabel(label);
+    public ResponseEntity<Label> createLabel(@RequestBody LabelRequest labelRequest) {
+        Label createdLabel = labelService.createLabel(labelRequest);
         return ResponseEntity.ok(createdLabel);
     }
 

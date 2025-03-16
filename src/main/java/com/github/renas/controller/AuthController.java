@@ -1,5 +1,6 @@
 package com.github.renas.controller;
 
+import com.github.renas.requests.LoginRequest;
 import com.github.renas.requests.UserRequest;
 import com.github.renas.security.Role;
 import com.github.renas.service.UserService;
@@ -26,21 +27,19 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody UserRequest request) {
-        userService.registerUser(request.name(), request.password(), Role.ROLE_USER);
+        userService.registerUser(request.name(), request.password(), request.email(), Role.ROLE_USER);
         return ResponseEntity.ok("User registered successfully!");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserRequest request, HttpServletRequest req, HttpServletResponse res) {
+    public ResponseEntity<String> login(@RequestBody LoginRequest request, HttpServletRequest req, HttpServletResponse res) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.name(), request.password()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // ✅ Explicitly create session if not already created
         req.getSession(true);
 
-        // ✅ Ensure JSESSIONID is set in response headers
         String sessionId = req.getSession().getId();
         res.setHeader("Set-Cookie", "JSESSIONID=" + sessionId + "; Path=/; HttpOnly; Secure");
 

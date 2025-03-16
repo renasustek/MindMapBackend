@@ -37,43 +37,42 @@ public class KanbanBoardService {
         String boardName = getKanbanBoardName(id);
 
         List<UUID> taskUUIDs = taskKanbanRepo.findTaskIdsForCurrentUser(id);
-
-        if (taskUUIDs.isEmpty()) {
-            throw new ResourceNotFoundException("Kanbanboard with ID " + id + " has no tasks");
-        }
-
-        List<TaskDao> taskDaos = taskRepo.findAllForCurrentUserByTaskIds(taskUUIDs);
-
-        List<Task> tasksList = taskDaos.stream().map(taskDao -> new Task(
-                        taskDao.getUuid(),
-                        taskDao.getName(),
-                        taskDao.getDescription(),
-                        taskDao.getEisenhower(),
-                        taskDao.getLabelId(),
-                        taskDao.getCreatedDate(),
-                        taskDao.getDueDate(),
-                        taskDao.getCompletedDate(),
-                        taskDao.getTaskStatus()
-                )
-        ).toList();//todo call the service not the repo please - no need to redo logic
-
         List<Task> todoTasks = new ArrayList<>();
         List<Task> inProgressTasks = new ArrayList<>();
         List<Task> doneTasks = new ArrayList<>();
+        if (!taskUUIDs.isEmpty()) {
 
-        for (Task task : tasksList) {
-            switch (task.taskStatus()) {
-                case TODO:
-                    todoTasks.add(task);
-                    break;
-                case INPROGRESS:
-                    inProgressTasks.add(task);
-                    break;
-                case DONE:
-                    doneTasks.add(task);
-                    break;
+            List<TaskDao> taskDaos = taskRepo.findAllForCurrentUserByTaskIds(taskUUIDs);
+
+            List<Task> tasksList = taskDaos.stream().map(taskDao -> new Task(
+                            taskDao.getUuid(),
+                            taskDao.getName(),
+                            taskDao.getDescription(),
+                            taskDao.getEisenhower(),
+                            taskDao.getLabelId(),
+                            taskDao.getCreatedDate(),
+                            taskDao.getDueDate(),
+                            taskDao.getCompletedDate(),
+                            taskDao.getTaskStatus()
+                    )
+            ).toList();//todo call the service not the repo please - no need to redo logic
+
+            for (Task task : tasksList) {
+                switch (task.taskStatus()) {
+                    case TODO:
+                        todoTasks.add(task);
+                        break;
+                    case INPROGRESS:
+                        inProgressTasks.add(task);
+                        break;
+                    case DONE:
+                        doneTasks.add(task);
+                        break;
+                }
             }
+
         }
+
 
         return new KanbanBoard(id, boardName, todoTasks, inProgressTasks, doneTasks);
     }

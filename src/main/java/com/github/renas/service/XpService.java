@@ -1,6 +1,7 @@
 package com.github.renas.service;
 
 import com.github.renas.gamification.Rewards;
+import com.github.renas.persistance.UserRepository;
 import com.github.renas.persistance.XpPointsRepo;
 import com.github.renas.persistance.models.UserDao;
 import com.github.renas.persistance.models.XpDao;
@@ -15,14 +16,16 @@ import static com.github.renas.security.CurrentUserId.getLoggedInUserId;
 @Service
 public class XpService {
     private final XpPointsRepo xpPointsRepo;
-
-    public XpService(XpPointsRepo xpPointsRepo) {
+    private final UserRepository userRepo;
+    public XpService(XpPointsRepo xpPointsRepo, UserRepository userRepo) {
         this.xpPointsRepo = xpPointsRepo;
+        this.userRepo = userRepo;
     }
 
     public XpDao addXP(Rewards rewards) {
         XpDao xpDao = new XpDao();
         xpDao.setId(getLoggedInUserId());
+        xpDao.setUsername(userRepo.findById(getLoggedInUserId()).get().getUsername());
         xpDao.setXpPoints(rewards.getXpValue() +xpPointsRepo.findById(getLoggedInUserId()).get().getXpPoints());
         return xpPointsRepo.save(xpDao);
     }

@@ -28,15 +28,20 @@ public class UserDao implements UserDetails {
     @JdbcTypeCode(SqlTypes.VARCHAR)
     private String password;
 
+    @Column(name = "email", nullable = false, length = 255)
+    @JdbcTypeCode(SqlTypes.VARCHAR)
+    private String email;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 
     public UserDao() {}
 
-    public UserDao(UUID id,String username, String password, Role role) {
+    public UserDao(UUID id,String username, String password, String email, Role role) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.email = email;
         this.role = role;
     }
 
@@ -57,6 +62,14 @@ public class UserDao implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override

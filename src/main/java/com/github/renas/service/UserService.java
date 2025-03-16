@@ -19,9 +19,9 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public UserDao registerUser(String username, String password, Role role) {
+    public UserDao registerUser(String username, String password, String email, Role role) {
         String encodedPassword = passwordEncoder.encode(password);
-        UserDao user = new UserDao(UUID.randomUUID(),username, encodedPassword, role);
+        UserDao user = new UserDao(UUID.randomUUID(),username, encodedPassword, email, role);
         return userRepository.save(user);
     }
 }

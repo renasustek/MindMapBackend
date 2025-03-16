@@ -2,6 +2,7 @@ package com.github.renas.persistance;
 
 import com.github.renas.persistance.models.TaskDao;
 import com.github.renas.persistance.models.UserDao;
+import com.github.renas.requests.task.TaskStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -70,5 +71,20 @@ public interface TaskRepo extends JpaRepository<TaskDao, UUID> {
         return countTotalTasks(startDate, endDate, getLoggedInUserId());
     }
 
+    @Query("SELECT COUNT(t) FROM TaskDao t " +
+            "WHERE t.userId = :userId " +
+            "AND t.taskStatus IN ('TODO','INPROGRESS') " +
+            "AND t.dueDate < :currentDate")
+    long countOverdueTasks(UUID userId, LocalDate currentDate);
 
+    @Query("SELECT COUNT(t) FROM TaskDao t " +
+            "WHERE t.userId = :userId " +
+            "AND t.taskStatus = :status")
+    long countTasksByStatus(UUID userId, TaskStatus status);
+
+    @Query("SELECT g.specificSteps AS goalName, COUNT(t) as todoCount " +
+            "FROM TaskDao t JOIN GoalDao g ON g.userId = t.userId " +
+            "WHERE t.taskStatus = 'TODO' AND t.userId = :userId " +
+            "GROUP BY g.specificSteps")
+    List<Object[]> findTodoTasksPerGoal(UUID userId);
 }

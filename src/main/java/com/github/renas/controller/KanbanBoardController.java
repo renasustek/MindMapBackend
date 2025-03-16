@@ -24,11 +24,4 @@ public class KanbanBoardController {
     public ResponseEntity<KanbanBoard> getKanbanBoard(@PathVariable UUID id) {
         return ResponseEntity.ok(kanbanBoardService.getKanbanBoard(id));
     }
-
-
-
-
-
-
-
 }

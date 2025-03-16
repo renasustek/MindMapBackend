@@ -94,8 +94,6 @@ public class TaskService {
         if (!taskRepo.existsById((task.id()))) {
             throw new ResourceNotFoundException("Task with ID " + task.id() + " not found");
         }
-        taskRepo.deleteById(task.id());
-
         TaskDao taskDao = new TaskDao();
         return saveAndConvertTaskDaoToTask(task, taskDao, task.id());
     }//todo when you delete and save it it deletes all forigen keys-> make it just update it not delete and put back

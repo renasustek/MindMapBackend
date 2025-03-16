@@ -1,5 +1,6 @@
 package com.github.renas.controller;
 
+import com.github.renas.requests.TaskStatusRequest;
 import com.github.renas.requests.task.Task;
 import com.github.renas.requests.task.TaskRequestForCreate;
 import com.github.renas.requests.task.TaskStatus;
@@ -42,8 +43,8 @@ public class TaskController {
     }
 
     @PostMapping("/change-status/{id}")
-    public ResponseEntity<TaskStatus> changeStatus(@PathVariable UUID id, @RequestBody TaskStatus newStatus) {
-        return ResponseEntity.ok(taskService.changeStatus(id, newStatus));
+    public ResponseEntity<TaskStatus> changeStatus(@PathVariable UUID id,@RequestBody TaskStatusRequest request) {
+        return ResponseEntity.ok(taskService.changeStatus(id, request.newStatus()));
     }
 
 }

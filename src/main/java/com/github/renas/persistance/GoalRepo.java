@@ -28,6 +28,11 @@ public interface GoalRepo extends JpaRepository<GoalDao, UUID> {
     default Optional<GoalDao> findByIdUserId(UUID goalId) {
         return findByIdAndUserId(goalId,getLoggedInUserId());
     }
+    @Query("SELECT COUNT(g) FROM GoalDao g " +
+            "WHERE g.userId = :userId " +
+            "AND g.isGoalRealistic = TRUE ")
+    long countRealisticGoals(UUID userId);
+
 
 
 }

@@ -6,6 +6,7 @@ CREATE TABLE users
     id       CHAR(36) PRIMARY KEY,
     username VARCHAR(50) UNIQUE               NOT NULL,
     password VARCHAR(255)                     NOT NULL,
+    email varchar(255) NOT NULL,
     role     ENUM ('ROLE_USER', 'ROLE_ADMIN') NOT NULL,
     xp       INT                              NOT NULL DEFAULT 0
 );
@@ -96,9 +97,17 @@ CREATE TABLE IF NOT EXISTS `label_chatbotmessage`
     FOREIGN KEY (`chatbot_message_id`) REFERENCES `chatbot_messages` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO users (id, username, password, role)
+CREATE TABLE IF NOT EXISTS triggers (
+                                        uuid CHAR(36) NOT NULL,
+                                        trigger_type ENUM('SPARK','FACILITATOR','SIGNAL') NOT NULL,
+                                        message_template VARCHAR(255)      ,
+                                        PRIMARY KEY (uuid)
+);
+
+
+INSERT INTO users (id, username, password, email, role)
 VALUES ('75b14a14-3146-4e62-b733-8cc0f215d062', 'insert',
-        '$2a$10$2jX7tKrvCGw81AgaxflwDebiYqFIJBKT9DqTVz2.RQsu8igbIn4Yu', 'ROLE_USER');
+        '$2a$10$2jX7tKrvCGw81AgaxflwDebiYqFIJBKT9DqTVz2.RQsu8igbIn4Yu','renasustek@gmail.com', 'ROLE_USER');
 
 INSERT INTO `kanban_board` (`uuid`, `user_id`, `name`)
 VALUES ('74461839-f6af-45db-a1c9-1a89b33314d9', '75b14a14-3146-4e62-b733-8cc0f215d062', 'Project A'),
