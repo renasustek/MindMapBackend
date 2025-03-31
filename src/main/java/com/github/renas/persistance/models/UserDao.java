@@ -49,6 +49,10 @@ public class UserDao implements UserDetails {
         return id;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(role);
