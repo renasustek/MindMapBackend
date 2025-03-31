@@ -68,6 +68,10 @@ public class UserDao implements UserDetails {
         return username;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -95,4 +99,6 @@ public class UserDao implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
 }
