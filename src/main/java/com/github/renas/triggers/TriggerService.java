@@ -44,11 +44,7 @@ public class TriggerService {
         this.mainKanbanService = mainKanbanService;
     }
 
-    /**
-     * This method runs once every 24 hours (86,400,000 ms).
-     * You can change this to a cron expression if you prefer a specific time of day.
-     */
-    @Scheduled(fixedRate = 86400000) // 24 hours in milliseconds
+    @Scheduled(fixedRate = 86400000)
     public void scheduledEmailSender() {
         List<UserDao> users = userRepo.findAll();
         for (UserDao user : users) {
@@ -56,9 +52,7 @@ public class TriggerService {
         }
     }
 
-    /**
-     * Entry point: Evaluate the user’s data and send an appropriate Fogg trigger email.
-     */
+
     public void processTrigger(UserDao user) {
         double motivation = calculateMotivationValue(user);
         double ability = calculateAbilityValue(user);
@@ -71,15 +65,10 @@ public class TriggerService {
         sendEmail(user.getEmail(), subject, body);
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    //  STEP 1: Calculate MOTIVATION & ABILITY
-    // ─────────────────────────────────────────────────────────────────────────
-
     private double calculateMotivationValue(UserDao user) {
         LocalDate now = LocalDate.now();
         LocalDate thirtyDaysAgo = now.minusDays(30);
 
-        // A) Get tasks done in the last 30 days
         long tasksDoneCount = taskRepo.countTasksCompletedOnTime(thirtyDaysAgo, now, user.getId());
         long tasksCreatedCount = taskRepo.countTotalTasks(thirtyDaysAgo, now, user.getId());
 
@@ -88,16 +77,13 @@ public class TriggerService {
             completionRate = (double) tasksDoneCount / tasksCreatedCount; // range [0..1]
         }
 
-        // B) Use average sentiment from the chatbot to gauge positivity
         Double avgSentiment = chatbotRepo.findAverageSentimentScore(thirtyDaysAgo, now, user.getId());
         if (avgSentiment == null) {
             avgSentiment = 0.5; // if no data, assume neutral
         }
 
-        // Weighted approach: M = 0.6*(completionRate) + 0.4*(avgSentiment)
         double motivation = 0.6 * completionRate + 0.4 * avgSentiment;
 
-        // Return scaled 0..100
         return motivation * 100.0;
     }
 
@@ -107,7 +93,6 @@ public class TriggerService {
         long inProgressCount = taskRepo.countTasksByStatus(user.getId(), TaskStatus.INPROGRESS);
         long realisticGoalsCount = goalRepo.countRealisticGoals(user.getId());
 
-        // Start at 100, subtract penalty, add bonus
         double baseAbility = 100.0;
 
         double overduePenalty = Math.min(overdueTasks * 2.5, 50);
@@ -116,18 +101,13 @@ public class TriggerService {
         double inProgressPenalty = Math.min(inProgressCount * 1.5, 30);
         baseAbility -= inProgressPenalty;
 
-        baseAbility += realisticGoalsCount * 5; // each realistic goal adds 5
+        baseAbility += realisticGoalsCount * 5;
 
-        // clamp to [0..100]
         if (baseAbility < 0) baseAbility = 0;
         if (baseAbility > 100) baseAbility = 100;
 
         return baseAbility;
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    //  STEP 2: Decide Which Trigger
-    // ─────────────────────────────────────────────────────────────────────────
 
     private TriggerType decideTrigger(double motivation, double ability) {
         double threshold = 50.0;
@@ -146,10 +126,6 @@ public class TriggerService {
             return TriggerType.SIGNAL;
         }
     }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    //  STEP 3: Craft the Email
-    // ─────────────────────────────────────────────────────────────────────────
 
     private String buildSubjectLine(TriggerType triggerType) {
         switch (triggerType) {
@@ -232,6 +208,5 @@ public class TriggerService {
         message.setText(body);
 
         mailSender.send(message);
-        System.out.println("Email sent to " + to + " with subject: " + subject);
     }
 }

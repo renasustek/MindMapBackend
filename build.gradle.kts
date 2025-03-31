@@ -54,6 +54,10 @@ tasks.test {
 	finalizedBy(tasks.jacocoTestReport)
 }
 
+tasks.bootBuildImage {
+	imageName = "renasustek/mind-map-backend"
+}
+
 tasks.jacocoTestReport {
 	reports {
 		xml.required = true

@@ -1,6 +1,15 @@
 version: '3'
 
 services:
+  mindMapBackend:
+    container_name: mind_map_backend
+    image: renasustek/mind-map-backend
+    ports:
+      - '8080:8080'
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db:3306/mind_map?useSSL=false&serverTimezone=UTC&useUnicode=yes&characterEncoding=UTF-8
   # MySQL
   db:
     container_name: mysql_mindmap

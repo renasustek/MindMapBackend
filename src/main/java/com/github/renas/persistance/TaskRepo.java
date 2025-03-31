@@ -71,11 +71,11 @@ public interface TaskRepo extends JpaRepository<TaskDao, UUID> {
         return countTotalTasks(startDate, endDate, getLoggedInUserId());
     }
 
-    @Query("SELECT COUNT(t) FROM TaskDao t " +
-            "WHERE t.userId = :userId " +
-            "AND t.taskStatus IN ('TODO','INPROGRESS') " +
-            "AND t.dueDate < :currentDate")
-    long countOverdueTasks(UUID userId, LocalDate currentDate);
+        @Query("SELECT COUNT(t) FROM TaskDao t " +
+                "WHERE t.userId = :userId " +
+                "AND t.taskStatus IN ('TODO','INPROGRESS') " +
+                "AND t.dueDate < :currentDate")
+        long countOverdueTasks(UUID userId, LocalDate currentDate);
 
     @Query("SELECT COUNT(t) FROM TaskDao t " +
             "WHERE t.userId = :userId " +

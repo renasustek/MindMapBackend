@@ -88,7 +88,7 @@ public class TaskService {
             throw new ResourceNotFoundException("Task with ID " + id + " not found");
         }
         taskRepo.deleteById(id);
-    }//todo make it delete by user id aswell
+    }
 
     public Task update(Task task) {
         if (!taskRepo.existsById((task.id()))) {
@@ -96,8 +96,7 @@ public class TaskService {
         }
         TaskDao taskDao = new TaskDao();
         return saveAndConvertTaskDaoToTask(task, taskDao, task.id());
-    }//todo when you delete and save it it deletes all forigen keys-> make it just update it not delete and put back
-    //todo make it update by user id
+    }
 
     private Task saveAndConvertTaskDaoToTask(Task task, TaskDao taskDao, UUID id) {
         taskDao.setUuid(id);

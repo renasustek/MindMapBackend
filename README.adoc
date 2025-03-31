@@ -1,0 +1,17 @@
+= MindMapBackend
+
+== Docker
+
+* Build
++
+[source, shell]
+----
+./gradlew bootBuildImage
+----
+
+* Run
++
+[source, shell]
+----
+docker compose up
+----

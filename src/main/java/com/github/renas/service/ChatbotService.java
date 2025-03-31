@@ -49,7 +49,7 @@ public class ChatbotService {
 
         if (chatbotResponseEntity.getBody() != null && sentimentalAnalysisResponseEntity.getBody() != null) {
             saveResponseToDatabase(request, sentimentalAnalysisResponseEntity.getBody().score());
-        }//todo couldnt save to database if statment here
+        }
 
         return chatbotResponseEntity;
     }

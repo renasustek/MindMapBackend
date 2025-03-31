@@ -9,7 +9,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "kanban_board", schema = "mind_map")
-public class KanbanBoardDao {
+public class    KanbanBoardDao {
 
     @Id
     @Column(name = "uuid", columnDefinition = "CHAR(36)", nullable = false, unique = true, length = 36)

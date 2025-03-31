@@ -1,7 +1,6 @@
 package com.github.renas.controller;
 
-import com.github.renas.service.ProcrastinationService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.github.renas.service.ProcastinationGraphService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,10 +15,10 @@ import java.util.Map;
 @RequestMapping("/procrastinationLevel")
 public class ProcrastinationController {
 
-    private final ProcrastinationService procrastinationService;
+    private final ProcastinationGraphService procastinationGraphService;
 
-    public ProcrastinationController(ProcrastinationService procrastinationService) {
-        this.procrastinationService = procrastinationService;
+    public ProcrastinationController(ProcastinationGraphService procastinationGraphService) {
+        this.procastinationGraphService = procastinationGraphService;
     }
 
     @GetMapping
@@ -30,7 +29,7 @@ public class ProcrastinationController {
         LocalDate endDate = LocalDate.now();
         LocalDate startDate = endDate.minusDays(timeframeDays);
 
-        List<Map<String, Object>> responseList = procrastinationService.calculateProcrastinationScores(startDate, endDate, intervalDays);
+        List<Map<String, Object>> responseList = procastinationGraphService.calculateProcrastinationScores(startDate, endDate, intervalDays);
 
         return ResponseEntity.ok(responseList);
     }

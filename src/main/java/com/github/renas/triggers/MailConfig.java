@@ -1,4 +1,4 @@
-package com.github.renas.config;
+package com.github.renas.triggers;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +15,8 @@ public class MailConfig {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-        mailSender.setUsername("mindmapdissertation@gmail.com"); // Replace with your email
-        mailSender.setPassword("uxkl jbor xrfe rfdv"); // Use an App Password, NOT your Gmail password
+        mailSender.setUsername("mindmapdissertation@gmail.com");
+        mailSender.setPassword("uxkl jbor xrfe rfdv");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.smtp.auth", "true");
