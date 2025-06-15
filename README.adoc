@@ -1,17 +1,38 @@
-= MindMapBackend
+MindMapBackend
 
-== Docker
+A Spring Boot application designed to enhance productivity through task and goal management, integrated gamification, and AI-powered chatbot interactions with sentiment analysis. This backend provides a robust API for a comprehensive mind mapping and productivity application.
 
-* Build
-+
-[source, shell]
-----
-./gradlew bootBuildImage
-----
+Key Technologies
 
-* Run
-+
-[source, shell]
-----
-docker compose up
-----
+Java 21
+
+Spring Boot
+
+MySQL (via Docker)
+
+Spring Data JPA & Hibernate
+
+Spring Security
+
+Gradle
+
+Docker & Docker Compose
+
+FastAPI (External Python services for AI features)
+
+Core Features
+
+Task & Goal Management: Create, track, and manage tasks and personal goals within Kanban boards.
+
+Gamification: Reward users with XP for completing tasks and interacting with the chatbot, including a leaderboard system.
+
+AI Integration: Features a chatbot for user assistance and sentiment analysis on user inputs, influencing task prioritization and triggering personalized email nudges.
+
+Procrastination Tracking: Calculates and provides insights into user procrastination levels.
+
+
+Testing
+The project includes unit and integration tests.
+
+CI/CD
+Continuous Integration is set up with GitHub Actions to build and analyze the project using SonarCloud on pushes and pull requests.
